@@ -9,11 +9,8 @@ from sklearn.metrics import precision_recall_curve, plot_precision_recall_curve
 from sklearn.model_selection import RandomizedSearchCV
 
 from src.model_config import (
-    tfidf_pipeline,
-    doc2vec_pipeline,
-    tfidf_distribution,
-    config_params,
-    doc2vec_distribution,
+    PIPELINE_CONFIG,
+    DISTRIBUTION_CONFIG,
 )
 from src.scorer import custom_scorer
 
@@ -30,8 +27,8 @@ def create_pipeline_distribution() -> Tuple[Pipeline, dict]:
     Returns:
 
     """
-    pipeline = tfidf_pipeline
-    distribution = tfidf_distribution
+    pipeline = PIPELINE_CONFIG
+    distribution = DISTRIBUTION_CONFIG
     logger.info(f"Pipeline constructed: \n{pipeline}")
     return pipeline, distribution
 
@@ -89,20 +86,21 @@ def get_cv_metrics(rscv: RandomizedSearchCV) -> pd.DataFrame:
 
 
 def fit_pipeline(
-    pipeline: Pipeline, X_train: pd.DataFrame, y_train: pd.Series
+    pipeline: Pipeline, params:dict, X: pd.DataFrame, y: pd.Series
 ) -> Pipeline:
     """
-    Load the params for the pipeline and fit the pipeline using training data.
+    Load the params for the pipeline and fit the pipeline using labelled data.
 
     Args:
         pipeline:
-        X_train:
-        y_train:
+        params
+        X:
+        y:
 
     Returns: A fitted pipeline
     """
-    pipeline.set_params(**config_params)
-    pipeline.fit(X_train, y_train)
+    pipeline.set_params(**params)
+    pipeline.fit(X, y)
     return pipeline
 
 

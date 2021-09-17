@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 
 import pandas as pd
 
+from src.io import save_params, load_params
 from src.logger import configure_parent_logger
 from src.modeling import (
     create_pipeline_distribution,
@@ -49,14 +50,17 @@ if __name__ == "__main__":
         rscv = random_search(pipeline, distribution, X_train, y_train)
         cv_metrics_df = get_cv_metrics(rscv)
         feature_names = inspect_pipeline(rscv.best_estimator_)
+        save_params(rscv.best_params_)
 
     elif args.mode == "test":
-        pipeline = fit_pipeline(pipeline, X_train, y_train)
+        params = load_params()
+        pipeline = fit_pipeline(pipeline, params, X_train, y_train)
         metrics_df = evaluate_pipeline(pipeline, X_train, X_test, y_train, y_test)
         feature_names = inspect_pipeline(pipeline)
 
     elif args.mode == "full":
-        pipeline = fit_pipeline(pipeline, X, y)
+        params = load_params()
+        pipeline = fit_pipeline(pipeline, params, X, y)
 
     # close the file handler
     logging.shutdown()

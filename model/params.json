@@ -1,0 +1,1 @@
+{"clf__max_depth": 5, "clf__max_features": "log2", "clf__random_state": 5, "undersampler__random_state": 9, "union__tfidf__max_df": 0.8142072116395774, "union__tfidf__min_df": 0.017425859940308142, "union__tfidf__ngram_range": [1, 1], "union__tfidf__use_idf": false}
